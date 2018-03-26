@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.totalsize.MainActivity">
+
+    <TextView
+        android:id="@+id/DataDirectory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="内部存储空间：" />
+
+    <TextView
+        android:id="@+id/StorageDirectory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SD空间：" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/bt_window"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="悬浮窗" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
