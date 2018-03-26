@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mParams = new WindowManager.LayoutParams();
         mParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
         mParams.type = WindowManager.LayoutParams.TYPE_PHONE;
-        mParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+       // mParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
         mParams.format = PixelFormat.RGBA_8888;
         mParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
         mParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
