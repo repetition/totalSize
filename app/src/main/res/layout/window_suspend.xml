@@ -6,11 +6,16 @@
     android:orientation="vertical">
 
 
-    <Button
+    <Switch
         android:id="@+id/bt_toggle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="toggle" />
+        android:textOff="  "
+        android:textOn="  "
+        android:switchMinWidth="20dp"
+        android:track="@drawable/switch_selector"
+        android:thumb="@drawable/thumb_selectot"
+        />
 
 
     <TextView

@@ -1,6 +1,7 @@
 package com.totalsize;
 
 import android.content.Context;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.text.format.Formatter;
 import android.widget.Toast;
@@ -27,6 +28,10 @@ public class WIFIManager {
         mContext = context;
     }
 
+    public WifiInfo getConnectionInfo() {
+        return mWifiManager.getConnectionInfo();
+    }
+
     /**
      * @return true 为打开   false 为关闭
      */
@@ -46,5 +51,11 @@ public class WIFIManager {
     public String getIpAddress() {
         int ipAddress = mWifiManager.getConnectionInfo().getIpAddress();
         return Formatter.formatIpAddress(ipAddress);
+
+
+    }
+
+    public boolean getWiFiState() {
+        return mWifiManager.isWifiEnabled();
     }
 }
