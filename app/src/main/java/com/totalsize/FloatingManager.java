@@ -3,9 +3,12 @@ package com.totalsize;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -20,6 +23,8 @@ public class FloatingManager {
     private WindowManager mWindowManager;
     private Context mContext;
     public static int OVERLAY_PERMISSION_REQ_CODE = 0;
+    private View view;
+    private WindowManager.LayoutParams mParams;
 
     public static FloatingManager getInstance(Context context) {
         if (floatingManager == null) {
@@ -31,6 +36,47 @@ public class FloatingManager {
     public FloatingManager(Context context) {
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         mContext = context;
+    }
+
+
+    public void initWindow() {
+        view = LayoutInflater.from(mContext).inflate(R.layout.window_suspend, null);
+        mParams = new WindowManager.LayoutParams();
+        mParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+        mParams.type = WindowManager.LayoutParams.TYPE_PHONE;
+        //mParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        // mParams.type = WindowManager.LayoutParams.TYPE_TOAST;
+        mParams.format = PixelFormat.TRANSPARENT;
+        // 设置浮动窗口不可聚焦（实现操作除浮动窗口外的其他可见窗口的操作）
+        //  mParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+/*        mParams.flags = WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM |
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
+                WindowManager.LayoutParams.FLAG_FULLSCREEN;*/
+        mParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+        mParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        mParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+/*        mParams.width = view.getWidth();
+        mParams.height = view.getHeight();*/
+        mParams.x = 0;
+        mParams.y = 0;
+    }
+
+
+    public void showView() {
+        try {
+            mWindowManager.addView(view, mParams);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(mContext, "请打开悬浮窗权限！", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void hideView() {
+        mWindowManager.removeView(view);
+    }
+
+    public View getView() {
+        return view;
     }
 
     /**
@@ -46,7 +92,7 @@ public class FloatingManager {
             return true;
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(mContext,"请打开悬浮窗权限！",Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "请打开悬浮窗权限！", Toast.LENGTH_SHORT).show();
             return false;
         }
     }

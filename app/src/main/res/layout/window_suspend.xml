@@ -5,23 +5,54 @@
     android:background="@android:color/transparent"
     android:orientation="vertical">
 
-
-    <Switch
-        android:id="@+id/bt_toggle"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textOff="  "
-        android:textOn="  "
-        android:switchMinWidth="20dp"
-        android:track="@drawable/switch_selector"
-        android:thumb="@drawable/thumb_selectot"
-        />
+        android:orientation="horizontal">
 
 
-    <TextView
-        android:id="@+id/tv_address"
+        <Switch
+            android:id="@+id/bt_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:switchMinWidth="20dp"
+            android:textOff="  "
+            android:textOn="  "
+            android:thumb="@drawable/thumb_selectot"
+            android:track="@drawable/switch_selector" />
+
+        <TextView
+            android:id="@+id/tv_wifi_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已打开"
+            android:textColor="@android:color/darker_gray" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="10.10.10.10" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10.10.10.10"
+            android:textColor="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/tv_wifi_ssid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="thinkwin"
+            android:textColor="@android:color/darker_gray" />
+
+
+    </LinearLayout>
+
 
 </LinearLayout>
