@@ -108,6 +108,7 @@ public class FloatService extends Service {
                     WifiInfo connectionInfo = mWifiManager.getConnectionInfo();
                     final String ssid = connectionInfo.getSSID();
                     final String ipAddress = Formatter.formatIpAddress(connectionInfo.getIpAddress());
+                    Log.d(TAG,"ipAddress:"+ ipAddress);
 
                     if (!ipAddress.equals("0.0.0.0")) {
                         mHandler.post(new Runnable() {

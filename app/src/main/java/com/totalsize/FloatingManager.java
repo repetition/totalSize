@@ -5,8 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Build;
 import android.provider.Settings;
+import android.text.LoginFilter;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +27,9 @@ public class FloatingManager {
     private Context mContext;
     public static int OVERLAY_PERMISSION_REQ_CODE = 0;
     private View view;
+    private boolean isShow = false;
+    private static final String TAG = FloatingManager.class.getName();
+
     private WindowManager.LayoutParams mParams;
 
     public static FloatingManager getInstance(Context context) {
@@ -66,7 +72,11 @@ public class FloatingManager {
 
     public void showView() {
         try {
-            mWindowManager.addView(view, mParams);
+            if (!isShow) {
+                mWindowManager.addView(view, mParams);
+                isShow = true;
+                Log.d(TAG,"showView");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(mContext, "请打开悬浮窗权限！", Toast.LENGTH_SHORT).show();
@@ -74,7 +84,11 @@ public class FloatingManager {
     }
 
     public void hideView() {
-        mWindowManager.removeView(view);
+        if (isShow) {
+            mWindowManager.removeView(view);
+            isShow=false;
+            Log.d(TAG,"hideView");
+        }
     }
 
     public View getView() {
