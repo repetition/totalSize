@@ -38,7 +38,9 @@ public class FloatingManager {
         mContext = context;
     }
 
-
+    /**
+     * 初始化
+     */
     public void initWindow() {
         view = LayoutInflater.from(mContext).inflate(R.layout.window_suspend, null);
         mParams = new WindowManager.LayoutParams();
