@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,11 +16,20 @@
         android:id="@+id/StorageDirectory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/DataDirectory"
         android:text="SD空间：" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/tv_wifi_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/StorageDirectory"
+        android:text="wifiinfo：" />
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
         <Button
@@ -29,13 +38,23 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:text="悬浮窗" />
+
         <Button
             android:id="@+id/bt_remove"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:layout_toRightOf="@id/bt_window"
             android:text="隐藏" />
-    </LinearLayout>
+
+        <Button
+            android:id="@+id/bt_wifiInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_toRightOf="@id/bt_remove"
+            android:text="wifi" />
+    </RelativeLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

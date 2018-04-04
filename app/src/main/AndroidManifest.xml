@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
 
     <application
         android:name=".MyApplication"
@@ -24,7 +26,10 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".FloatService"  />
+        <service
+            android:name=".FloatService"
+            android:enabled="true"
+            android:persistent="true"></service>
     </application>
 
 </manifest>

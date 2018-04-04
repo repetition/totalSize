@@ -70,7 +70,6 @@ public class FloatService extends Service {
             mSWToggle.setChecked(false);
             mTVWiFiState.setText("已关闭");
         }
-
         mSWToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -109,6 +108,7 @@ public class FloatService extends Service {
                     final String ssid = connectionInfo.getSSID();
                     final String ipAddress = Formatter.formatIpAddress(connectionInfo.getIpAddress());
                     Log.d(TAG,"ipAddress:"+ ipAddress);
+                  //  mWifiManager.startScan();
 
                     if (!ipAddress.equals("0.0.0.0")) {
                         mHandler.post(new Runnable() {

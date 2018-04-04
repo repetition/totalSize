@@ -3,6 +3,7 @@ package com.totalsize;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.os.Build;
 import android.os.Handler;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -40,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private View view;
     private Button mBTRemove;
     private Intent intent;
+    private TextView mTVWifiInfo;
+    private Button mBTWifiInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +53,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         checkSDSize();
         checkSDSizeTimer();
     }
+
     private void initView() {
+        mWifiManager = WIFIManager.getInstance(MyApplication.getContext());
         mFloatingManager = FloatingManager.getInstance(MainActivity.this);
         mStorageDirectory = findViewById(R.id.StorageDirectory);
         mDataDirectory = findViewById(R.id.DataDirectory);
@@ -57,6 +63,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBTWindow.setOnClickListener(this);
         mBTRemove = findViewById(R.id.bt_remove);
         mBTRemove.setOnClickListener(this);
+        mTVWifiInfo = findViewById(R.id.tv_wifi_info);
+        mBTWifiInfo = findViewById(R.id.bt_wifiInfo);
+        mBTWifiInfo.setOnClickListener(this);
         intent = new Intent(MainActivity.this, FloatService.class);
         view = FloatingManager.getInstance(this).getView();
     }
@@ -75,6 +84,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.bt_remove:
                 stopService(intent);
+                break;
+
+            case R.id.bt_wifiInfo:
+
+                List<WifiConfiguration> wifiConfigurations = mWifiManager.getWifiConfigurations();
+                for (WifiConfiguration wifiConfiguration : wifiConfigurations) {
+                    mTVWifiInfo.append(wifiConfiguration + toString() + "\n");
+                }
                 break;
         }
     }
