@@ -8,9 +8,14 @@ import android.support.annotation.Nullable;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.totalsize.MainActivity.mHandler;
 
@@ -21,7 +26,7 @@ import static com.totalsize.MainActivity.mHandler;
 public class FloatService extends Service {
 
     private static final String TAG = FloatService.class.getName();
-
+    boolean isHome = false;
     private View view;
     private WIFIManager mWifiManager;
 
@@ -44,15 +49,37 @@ public class FloatService extends Service {
         mWifiManager = WIFIManager.getInstance(this);
 
         initListener();
+        checkSDSizeTimer();
         return super.onStartCommand(intent, flags, startId);
     }
 
+    private void checkSDSizeTimer() {
+        final Utils utils = new Utils();
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                final String sdTotalSize = utils.getSDTotalSize();
+                final String sdAvailableSize = utils.getSDAvailableSize();
+                final String romTotalSize = utils.getRomTotalSize();
+                final String romAvailableSize = utils.getRomAvailableSize();
+
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(FloatService.this, "sdTotalSize:" + sdTotalSize + ", sdAvailableSize:" + sdAvailableSize, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        }, 0, 5000L);
+    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         FloatingManager.getInstance(this).hideView();
-        Log.d(TAG,"onDestroy");
+        Log.d(TAG, "onDestroy");
     }
 
     public void initListener() {
@@ -61,6 +88,7 @@ public class FloatService extends Service {
         Switch mSWToggle = view.findViewById(R.id.bt_toggle);
         final TextView mTVWiFiState = view.findViewById(R.id.tv_wifi_state);
         final TextView mTVWiFiSSID = view.findViewById(R.id.tv_wifi_ssid);
+        Button Button = view.findViewById(R.id.tv_go_home);
 
         if (mWifiManager.getWiFiState()) {
             mSWToggle.setChecked(true);
@@ -70,6 +98,26 @@ public class FloatService extends Service {
             mSWToggle.setChecked(false);
             mTVWiFiState.setText("已关闭");
         }
+
+
+        Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isHome) {
+                    Intent intent = new Intent();
+                    // 为Intent设置Action、Category属性
+                    intent.setAction(Intent.ACTION_MAIN);// "android.intent.action.MAIN"
+                    intent.addCategory(Intent.CATEGORY_HOME); //"android.intent.category.HOME"
+                    startActivity(intent);
+                    isHome = true;
+                } else {
+                    startActivity(new Intent(FloatService.this, MainActivity.class));
+                    isHome = false;
+                }
+
+            }
+        });
+
         mSWToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -107,8 +155,8 @@ public class FloatService extends Service {
                     WifiInfo connectionInfo = mWifiManager.getConnectionInfo();
                     final String ssid = connectionInfo.getSSID();
                     final String ipAddress = Formatter.formatIpAddress(connectionInfo.getIpAddress());
-                    Log.d(TAG,"ipAddress:"+ ipAddress);
-                  //  mWifiManager.startScan();
+                    Log.d(TAG, "ipAddress:" + ipAddress);
+                    //  mWifiManager.startScan();
 
                     if (!ipAddress.equals("0.0.0.0")) {
                         mHandler.post(new Runnable() {
@@ -116,7 +164,7 @@ public class FloatService extends Service {
                             public void run() {
                                 tvAddress.setText(ipAddress);
                                 tvSSID.setText(ssid);
-                                Log.d(TAG,"wifi已经连接！+\n"+ssid+"\n"+ipAddress);
+                                Log.d(TAG, "wifi已经连接！+\n" + ssid + "\n" + ipAddress);
                             }
                         });
                         break;

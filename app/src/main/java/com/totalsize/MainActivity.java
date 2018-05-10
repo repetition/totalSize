@@ -45,13 +45,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView mTVWifiInfo;
     private Button mBTWifiInfo;
 
+    private static boolean isPermission = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
         checkSDSize();
-        checkSDSizeTimer();
+        //   checkSDSizeTimer();
     }
 
     private void initView() {
@@ -75,12 +77,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (v.getId()) {
             case R.id.bt_window:
-                boolean b = mFloatingManager.checkPermission(this);
-                if (!b) {
+                //检查权限
+                isPermission = mFloatingManager.checkPermission(this);
+
+                if (isPermission) {
+                    startService(intent);
+                    return;
+                }
+/*                if (!b) {
                     mFloatingManager.checkPermission(this);
                     return;
                 }
-                startService(intent);
+                startService(intent);*/
                 break;
             case R.id.bt_remove:
                 stopService(intent);
@@ -100,12 +108,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == OVERLAY_PERMISSION_REQ_CODE) {
-            if (Build.VERSION.SDK_INT >= 23) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (!Settings.canDrawOverlays(this)) {
                     Toast.makeText(mContext, "授权失败！请打开悬浮窗权限！", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(mContext, "授权成功！", Toast.LENGTH_SHORT).show();
-                    mFloatingManager.checkPermission(MainActivity.this);
+                    //mFloatingManager.checkPermission(MainActivity.this);
+                    isPermission = true;
+                    startService(intent);
+
                 }
             }
 
