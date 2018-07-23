@@ -1,23 +1,21 @@
-package com.totalsize;
+package com.totalsize.floatWindow;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Build;
 import android.provider.Settings;
-import android.text.LoginFilter;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import com.totalsize.R;
 
 import java.lang.reflect.Field;
 
@@ -60,6 +58,8 @@ public class FloatingManager implements View.OnTouchListener{
     public FloatingManager(Context context) {
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         mContext = context;
+        view = LayoutInflater.from(mContext).inflate(R.layout.window_suspend, null);
+        view.setOnTouchListener(this);
     }
 
     /**
@@ -85,9 +85,9 @@ public class FloatingManager implements View.OnTouchListener{
 
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
             mParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
-
         }else {
-            mParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+           // mParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+             mParams.type = WindowManager.LayoutParams.TYPE_PHONE;
         }
 
         // mParams.type = WindowManager.LayoutParams.TYPE_TOAST;
@@ -100,13 +100,34 @@ public class FloatingManager implements View.OnTouchListener{
         mParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
         mParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
         mParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-/*        mParams.width = view.getWidth();
-        mParams.height = view.getHeight();*/
+/*        mmParams.width = view.getWidth();
+        mmParams.height = view.getHeight();*/
         mParams.x = 0;
         mParams.y = 0;
     }
 
+    /**
+     * 初始化
+     */
+    public void initWindow2() {
+        mParams = new WindowManager.LayoutParams();
+        mParams.gravity = Gravity.TOP | Gravity.LEFT;
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        } else {
+            // mParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+            mParams.type = WindowManager.LayoutParams.TYPE_PHONE;
+        }
+        mParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        mParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        mParams.x = 0;
+        mParams.y = 0;
+
+        mParams.format = PixelFormat.TRANSPARENT;
+        mParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+    }
     public void showView() {
         if (!isShow) {
             mWindowManager.addView(view, mParams);
@@ -187,6 +208,7 @@ public class FloatingManager implements View.OnTouchListener{
                 Toast.makeText(mContext, "请打开悬浮窗权限", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + mContext.getPackageName()));
                 activity.startActivityForResult(intent, OVERLAY_PERMISSION_REQ_CODE);
+                return false;
             } else {
                 return true;
             }

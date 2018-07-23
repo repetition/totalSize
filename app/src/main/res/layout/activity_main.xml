@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.totalsize.MainActivity">
+    tools:context="com.totalsize.activity.MainActivity">
 
     <TextView
         android:id="@+id/DataDirectory"
@@ -38,6 +38,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:text="悬浮窗" />
+        <Button
+            android:id="@+id/bt_demo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_toRightOf="@id/bt_wifiInfo"
+            android:text="demo"/>
 
         <Button
             android:id="@+id/bt_remove"

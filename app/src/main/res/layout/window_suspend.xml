@@ -1,62 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
-    android:orientation="vertical">
+    android:background="@android:color/transparent">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/tv_wifi_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:text="WifiSwitch：" />
 
-        <Switch
-            android:id="@+id/bt_toggle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:switchMinWidth="20dp"
-            android:textOff="  "
-            android:textOn="  "
-            android:thumb="@drawable/thumb_selectot"
-            android:track="@drawable/switch_selector" />
-
-        <TextView
-            android:id="@+id/tv_wifi_state"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="已打开"
-            android:textColor="@android:color/darker_gray" />
-
-    </LinearLayout>
-
-
-    <LinearLayout
+    <Switch
+        android:id="@+id/bt_toggle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_toRightOf="@id/tv_wifi_switch"
+        android:switchMinWidth="20dp"
+        android:textOff="  "
+        android:textOn="  "
+        android:thumb="@drawable/thumb_selectot"
+        android:track="@drawable/switch_selector" />
 
-        <TextView
-            android:id="@+id/tv_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="10.10.10.10"
-            android:textColor="@android:color/darker_gray" />
+    <TextView
+        android:layout_alignRight="@id/tv_wifi_switch"
+        android:id="@+id/tv_ip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_wifi_switch"
+        android:text="IP：" />
 
-        <TextView
-            android:id="@+id/tv_wifi_ssid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="thinkwin"
-            android:textColor="@android:color/darker_gray" />
+    <TextView
+        android:id="@+id/tv_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_wifi_switch"
+        android:layout_toRightOf="@id/tv_ip"
+        android:text="10.10.10.10"
+        android:textColor="@android:color/darker_gray" />
 
-        <Button
-            android:id="@+id/tv_go_home"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="home"
-            android:textColor="@android:color/darker_gray" />
+    <TextView
+        android:layout_alignRight="@id/tv_ip"
+        android:id="@+id/tv_networkName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_address"
+        android:text="WifiName：" />
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_wifi_ssid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_address"
+        android:layout_toRightOf="@id/tv_networkName"
+        android:text="thinkwin"
+        android:textColor="@android:color/darker_gray" />
 
+    <ImageButton
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="5dp"
+    android:background="@drawable/home"
+    android:id="@+id/tv_go_home"
+    android:layout_width="30dp"
+    android:layout_height="30dp"
+    android:layout_below="@id/tv_networkName"
+    android:textColor="@android:color/darker_gray"
+    />
 
-</LinearLayout>
+    <ImageButton
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/fullscreen"
+        android:id="@+id/tv_full_screen"
+        android:layout_width="30dp"
+        android:layout_below="@id/tv_networkName"
+        android:layout_height="30dp"
+        android:layout_toRightOf="@id/tv_go_home"
+        android:textColor="@android:color/darker_gray"
+        />
+</RelativeLayout>

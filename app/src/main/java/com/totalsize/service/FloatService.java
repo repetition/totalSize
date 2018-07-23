@@ -1,4 +1,4 @@
-package com.totalsize;
+package com.totalsize.service;
 
 import android.app.Service;
 import android.content.Intent;
@@ -14,10 +14,16 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.totalsize.floatWindow.FloatingManager;
+import com.totalsize.R;
+import com.totalsize.utils.NetWorkManager;
+import com.totalsize.utils.Utils;
+import com.totalsize.activity.MainActivity;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.totalsize.MainActivity.mHandler;
+import static com.totalsize.activity.MainActivity.mHandler;
 
 /**
  * Created by RJYF-ZhangBo on 2018/3/27.
@@ -28,7 +34,7 @@ public class FloatService extends Service {
     private static final String TAG = FloatService.class.getName();
     boolean isHome = false;
     private View view;
-    private WIFIManager mWifiManager;
+    private NetWorkManager mNetWorkManager;
 
     @Nullable
     @Override
@@ -39,17 +45,18 @@ public class FloatService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+/*        FloatBallManager.getInstance(this).showFloatWindow();
+        FloatBallManager.getInstance(this).showView();
+        view = FloatBallManager.getInstance(this).getView();*/
 
-        FloatingManager.getInstance(this).initWindow();
-
+        FloatingManager.getInstance(this).initWindow2();
         FloatingManager.getInstance(this).showView();
-
-        view = FloatingManager.getInstance(this).getView();
-
-        mWifiManager = WIFIManager.getInstance(this);
+       view = FloatingManager.getInstance(this).getView();
+        mNetWorkManager = NetWorkManager.getInstance(this);
 
         initListener();
-        checkSDSizeTimer();
+      //  checkSDSizeTimer();
+        Toast.makeText(this,"启动了",Toast.LENGTH_SHORT).show();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -80,23 +87,21 @@ public class FloatService extends Service {
         super.onDestroy();
         FloatingManager.getInstance(this).hideView();
         Log.d(TAG, "onDestroy");
+        Toast.makeText(this,"onDestroy",Toast.LENGTH_SHORT).show();
     }
 
     public void initListener() {
 
         final TextView mTVAddress = view.findViewById(R.id.tv_address);
         Switch mSWToggle = view.findViewById(R.id.bt_toggle);
-        final TextView mTVWiFiState = view.findViewById(R.id.tv_wifi_state);
         final TextView mTVWiFiSSID = view.findViewById(R.id.tv_wifi_ssid);
         Button Button = view.findViewById(R.id.tv_go_home);
 
-        if (mWifiManager.getWiFiState()) {
+        if (mNetWorkManager.getWiFiState()) {
             mSWToggle.setChecked(true);
             getWiFiInfo(mTVAddress, mTVWiFiSSID);
-            mTVWiFiState.setText("已打开");
         } else {
             mSWToggle.setChecked(false);
-            mTVWiFiState.setText("已关闭");
         }
 
 
@@ -104,12 +109,18 @@ public class FloatService extends Service {
             @Override
             public void onClick(View view) {
                 if (!isHome) {
-                    Intent intent = new Intent();
-                    // 为Intent设置Action、Category属性
-                    intent.setAction(Intent.ACTION_MAIN);// "android.intent.action.MAIN"
-                    intent.addCategory(Intent.CATEGORY_HOME); //"android.intent.category.HOME"
-                    startActivity(intent);
-                    isHome = true;
+                    try {
+
+                        Intent intent = new Intent();
+                        // 为Intent设置Action、Category属性
+                        intent.setAction(Intent.ACTION_MAIN);// "android.intent.action.MAIN"
+                        intent.addCategory(Intent.CATEGORY_HOME); //"android.intent.category.HOME"
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        isHome = true;
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 } else {
                     startActivity(new Intent(FloatService.this, MainActivity.class));
                     isHome = false;
@@ -118,26 +129,24 @@ public class FloatService extends Service {
             }
         });
 
-        mSWToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+/*        mSWToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.d("main", isChecked + "");
                 if (isChecked) {
-                    boolean b = mWifiManager.wifiToggle();
+                    boolean b = mNetWorkManager.wifiToggle();
                     if (b) {
                         buttonView.setChecked(true);
                         getWiFiInfo(mTVAddress, mTVWiFiSSID);
-                        mTVWiFiState.setText("已打开");
                     }
                 } else {
-                    boolean b = mWifiManager.wifiToggle();
+                    boolean b = mNetWorkManager.wifiToggle();
                     if (!b) {
                         buttonView.setChecked(false);
-                        mTVWiFiState.setText("已关闭");
                     }
                 }
             }
-        });
+        });*/
 
     }
 
@@ -152,11 +161,11 @@ public class FloatService extends Service {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    WifiInfo connectionInfo = mWifiManager.getConnectionInfo();
+                    WifiInfo connectionInfo = mNetWorkManager.getConnectionInfo();
                     final String ssid = connectionInfo.getSSID();
                     final String ipAddress = Formatter.formatIpAddress(connectionInfo.getIpAddress());
                     Log.d(TAG, "ipAddress:" + ipAddress);
-                    //  mWifiManager.startScan();
+                    //  mNetWorkManager.startScan();
 
                     if (!ipAddress.equals("0.0.0.0")) {
                         mHandler.post(new Runnable() {

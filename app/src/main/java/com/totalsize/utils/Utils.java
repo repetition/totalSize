@@ -1,9 +1,14 @@
-package com.totalsize;
+package com.totalsize.utils;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.StatFs;
 import android.text.format.Formatter;
+import android.view.WindowManager;
+
+import com.totalsize.MyApplication;
 
 import java.io.File;
 
@@ -13,7 +18,11 @@ import java.io.File;
  */
 
 public class Utils {
+    private static Handler handler = new Handler();
 
+    public static void runOnUIThread(Runnable runnable){
+        handler.post(runnable);
+    }
 
     public static Context getContext() {
         return MyApplication.getContext();
@@ -25,7 +34,7 @@ public class Utils {
      *
      * @return
      */
-    String getSDTotalSize() {
+    public String getSDTotalSize() {
         File path = Environment.getExternalStorageDirectory();
         StatFs stat = new StatFs(path.getPath());
         long blockSize = stat.getBlockSize();
@@ -38,7 +47,7 @@ public class Utils {
      *
      * @return
      */
-    String getSDAvailableSize() {
+    public String getSDAvailableSize() {
         File path = Environment.getExternalStorageDirectory();
         StatFs stat = new StatFs(path.getPath());
         long blockSize = stat.getBlockSize();
@@ -51,7 +60,7 @@ public class Utils {
      *
      * @return
      */
-    String getRomTotalSize() {
+    public String getRomTotalSize() {
         File path = Environment.getDataDirectory();
         StatFs stat = new StatFs(path.getPath());
         long blockSize = stat.getBlockSize();
@@ -64,11 +73,32 @@ public class Utils {
      *
      * @return
      */
-    String getRomAvailableSize() {
+    public String getRomAvailableSize() {
         File path = Environment.getDataDirectory();
         StatFs stat = new StatFs(path.getPath());
         long blockSize = stat.getBlockSize();
         long availableBlocks = stat.getAvailableBlocks();
         return Formatter.formatFileSize(getContext(), blockSize * availableBlocks);
+    }
+
+    public static int getScreenWidth(Context context) {
+        Point point = new Point();
+        ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getSize(point);
+        return point.x;
+    }
+
+    public static int getScreenHeight(Context context) {
+        Point point = new Point();
+        ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getSize(point);
+        return point.y;
+    }
+
+    public static int getStatusBarHeight(Context context) {
+        int result = 0;
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = context.getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 }
