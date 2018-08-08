@@ -5,6 +5,19 @@
     android:background="@android:color/transparent">
 
     <TextView
+        android:id="@+id/tv_ftp"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_below="@+id/ib_ftp_server"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:text="ftp://11111"
+        android:textColor="#E066FF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:typeface="sans" />
+
+    <TextView
         android:id="@+id/tv_wifi_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -76,5 +89,28 @@
         android:layout_height="30dp"
         android:layout_toRightOf="@id/tv_go_home"
         android:textColor="@android:color/darker_gray"
+        />
+
+    <ImageButton
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/debug"
+        android:id="@+id/ib_adb_debut"
+        android:layout_width="30dp"
+        android:layout_below="@id/tv_networkName"
+        android:layout_height="30dp"
+        android:layout_toRightOf="@id/tv_full_screen"
+        android:textColor="@android:color/darker_gray"
+        />
+
+    <ImageButton
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/ftp"
+        android:id="@+id/ib_ftp_server"
+        android:layout_width="30dp"
+        android:layout_below="@id/tv_networkName"
+        android:layout_height="30dp"
+        android:layout_toRightOf="@id/ib_adb_debut"
         />
 </RelativeLayout>

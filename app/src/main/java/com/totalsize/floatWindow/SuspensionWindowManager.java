@@ -1,14 +1,17 @@
 package com.totalsize.floatWindow;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -21,11 +24,16 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.totalsize.MyApplication;
 import com.totalsize.R;
 import com.totalsize.activity.AppManager;
+import com.totalsize.ftp.FTPServer;
 import com.totalsize.receiver.NetworkReceiver;
+import com.totalsize.utils.ADBUtil;
 import com.totalsize.utils.CommonUtil;
 import com.totalsize.utils.NetWorkManager;
+import com.totalsize.utils.StatusBar;
+import com.totalsize.utils.ToastUtils;
 import com.totalsize.utils.Utils;
 
 public class SuspensionWindowManager {
@@ -45,6 +53,7 @@ public class SuspensionWindowManager {
     private float y;
     private boolean isShow = false;
     private final NetWorkManager netWorkManager;
+    private boolean isDebug;
 
     public static SuspensionWindowManager getInstance(Context context) {
         if (suspensionWindowManager == null) {
@@ -74,8 +83,11 @@ public class SuspensionWindowManager {
         final TextView mTVAddress = view.findViewById(R.id.tv_address);
         final Switch mSWToggle = view.findViewById(R.id.bt_toggle);
         final TextView mTVWiFiSSID = view.findViewById(R.id.tv_wifi_ssid);
+        final TextView mTVFtp = view.findViewById(R.id.tv_ftp);
         ImageButton button = view.findViewById(R.id.tv_go_home);
         ImageButton fullScreen = view.findViewById(R.id.tv_full_screen);
+        ImageButton debugButton = view.findViewById(R.id.ib_adb_debut);
+        final ImageButton ftpButton = view.findViewById(R.id.ib_ftp_server);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,17 +100,65 @@ public class SuspensionWindowManager {
                 mContext.startActivity(intent);
             }
         });
-
+        //全屏
         fullScreen.setOnClickListener(new View.OnClickListener() {
+            private boolean isFullScreen;
+
             @Override
             public void onClick(View v) {
-                //showBottomMenu();
-                fullScreenChange();
+                if (isFullScreen) {
+                    isFullScreen = false;
+                    StatusBar.hidden();
+                    ToastUtils.showMsg("全屏");
+                } else {
+                    StatusBar.show();
+                    isFullScreen = true;
+                    ToastUtils.showMsg("取消全屏");
+                }
+            }
+        });
+        //网络调试开启
+        debugButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isDebug) {
+                    isDebug = false;
+                    ADBUtil.adbStop();
+                } else {
+                    ADBUtil.adbStart();
+                    isDebug = true;
+                }
+            }
+        });
+        //ftp服务
+        ftpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent ftpIntent = new Intent(mContext, FTPServer.class);
+                Bundle bundle = new Bundle();
+                String localIpAddress = Utils.getLocalIpAddress();
+                bundle.putString("ip", localIpAddress);
+                ftpIntent.putExtras(bundle);
+                SharedPreferences sp = MyApplication.getContext().getSharedPreferences("conf", Context.MODE_PRIVATE);
+                boolean isRun = sp.getBoolean("isRun", false);
+                if (isRun) {
+                    mContext.stopService(ftpIntent);
+                    SharedPreferences.Editor editor = mContext.getSharedPreferences("conf", Context.MODE_PRIVATE).edit();
+                    editor.putBoolean("isRun", false);
+                    editor.apply();
+                    ToastUtils.showMsg("ftp stopping!");
+                    return;
+                }
+                ComponentName componentName = mContext.startService(ftpIntent);
+                Log.i("11", "服务启动 | " + localIpAddress + "========" + componentName);
+                SharedPreferences.Editor editor = mContext.getSharedPreferences("conf", Context.MODE_PRIVATE).edit();
+                editor.putBoolean("isRun", true);
+                editor.apply();
+                mTVFtp.setText("ftp://"+localIpAddress+":1111");
             }
         });
 
         boolean wifiEnabled = netWorkManager.isWifiEnabled();
-
         if (wifiEnabled) {
             mSWToggle.setChecked(true);
             String ipAddress = netWorkManager.getIpAddress();
@@ -241,12 +301,16 @@ public class SuspensionWindowManager {
     public void showView() {
         if (!isShow) {
             mWindowManager.addView(view, params);
+            isShow=true;
+        }else {
+            hideView();
         }
     }
 
     public void hideView() {
         if (isShow) {
             mWindowManager.removeView(view);
+            isShow=false;
         }
     }
 
