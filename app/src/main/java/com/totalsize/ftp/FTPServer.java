@@ -82,8 +82,8 @@ public class FTPServer extends Service {
                 ip = Utils.getLocalIpAddress();
                 Toast.makeText(MyApplication.getContext(), ip, Toast.LENGTH_SHORT).show();
             }
-            PendingIntent notificationIntent = PendingIntent.getActivity(AppManager.getAppManager().currentActivity(), 0, ftpIntent, 0);
-            Notification.Builder noti = new Notification.Builder(AppManager.getAppManager().currentActivity())
+            PendingIntent notificationIntent = PendingIntent.getActivity(this, 0, ftpIntent, 0);
+            Notification.Builder noti = new Notification.Builder(this)
                     .setContentTitle("FTPServerRunning")
                     .setContentText("ftp://"+ip+":1111")
                     .setSmallIcon(R.mipmap.ic_launcher)

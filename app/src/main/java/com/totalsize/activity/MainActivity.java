@@ -173,6 +173,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         String tmp = Config.UserConfig;
         File sourceFile = new File(dirname + "totalSize/users.properties");
+        if (!sourceFile.exists()) {
+            sourceFile.getParentFile().mkdirs();
+            sourceFile.createNewFile();
+        }
         fos = new FileOutputStream(sourceFile);
         fos.write(tmp.getBytes());
         fos.flush();

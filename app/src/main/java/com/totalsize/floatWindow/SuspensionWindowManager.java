@@ -91,7 +91,7 @@ public class SuspensionWindowManager {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "点击了", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "返回桌面", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent();
                 // 为Intent设置Action、Category属性
                 intent.setAction(Intent.ACTION_MAIN);// "android.intent.action.MAIN"
@@ -154,6 +154,7 @@ public class SuspensionWindowManager {
                 SharedPreferences.Editor editor = mContext.getSharedPreferences("conf", Context.MODE_PRIVATE).edit();
                 editor.putBoolean("isRun", true);
                 editor.apply();
+                ToastUtils.showMsg("ftp started!");
                 mTVFtp.setText("ftp://"+localIpAddress+":1111");
             }
         });
@@ -217,6 +218,11 @@ public class SuspensionWindowManager {
                 }
             }
         });
+
+        public void startActivity(){
+            Intent intent = new Intent(Settings.ACTION_SETTINGS);
+            mContext.startActivity(intent);
+        }
 
         NetworkReceiver.setmOnNetWordListener(new NetworkReceiver.onNetWordListener() {
             @Override
