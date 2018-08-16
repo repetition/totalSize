@@ -229,7 +229,6 @@ public class SuspensionWindowManager {
                }*/
             //打开设置页面
                 Intent intent = new Intent(Settings.ACTION_SETTINGS);
-                intent=null;
                 mContext.startActivity(intent);
             }
         });
