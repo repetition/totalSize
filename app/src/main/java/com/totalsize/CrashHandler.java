@@ -36,7 +36,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private Map<String, String> infos = new HashMap<String, String>();
  
     // 用于格式化日期,作为日志文件名的一部分
-    private DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,S");
+    private DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH,mm,ss,S");
  
     /** 保证只有一个CrashHandler实例 */
     private CrashHandler() {

@@ -54,6 +54,7 @@ public class SuspensionWindowManager {
     private boolean isShow = false;
     private final NetWorkManager netWorkManager;
     private boolean isDebug;
+    //private boolean isOpenSetting = false;
 
     public static SuspensionWindowManager getInstance(Context context) {
         if (suspensionWindowManager == null) {
@@ -88,6 +89,7 @@ public class SuspensionWindowManager {
         ImageButton fullScreen = view.findViewById(R.id.tv_full_screen);
         ImageButton debugButton = view.findViewById(R.id.ib_adb_debut);
         final ImageButton ftpButton = view.findViewById(R.id.ib_ftp_server);
+         ImageButton settingsButton = view.findViewById(R.id.ib_start_settings);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -218,11 +220,19 @@ public class SuspensionWindowManager {
                 }
             }
         });
-
-        public void startActivity(){
-            Intent intent = new Intent(Settings.ACTION_SETTINGS);
-            mContext.startActivity(intent);
-        }
+        //打开系统设置页面
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            /*   if(isOpenSetting){
+                   
+               }*/
+            //打开设置页面
+                Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                intent=null;
+                mContext.startActivity(intent);
+            }
+        });
 
         NetworkReceiver.setmOnNetWordListener(new NetworkReceiver.onNetWordListener() {
             @Override
