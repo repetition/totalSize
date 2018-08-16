@@ -1,6 +1,7 @@
 package com.totalsize.floatWindow;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -229,6 +230,7 @@ public class SuspensionWindowManager {
                }*/
             //打开设置页面
                 Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mContext.startActivity(intent);
             }
         });

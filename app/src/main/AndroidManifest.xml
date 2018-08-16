@@ -28,6 +28,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".activity.DemoActivity"/>
+
         <service
             android:name=".service.FloatService"
             android:enabled="true"
